@@ -126,6 +126,10 @@ impl<P: Parameters> AffineCurve for GroupAffine<P> {
     fn xy(&self) -> (Self::BaseField, Self::BaseField) {
         (self.x, self.y)
     }
+
+    fn from_xy(x: Self::BaseField, y: Self::BaseField) -> Self {
+        GroupAffine::new(x, y)
+    }
     fn prime_subgroup_generator() -> Self {
         Self::new(P::AFFINE_GENERATOR_COEFFS.0, P::AFFINE_GENERATOR_COEFFS.1)
     }

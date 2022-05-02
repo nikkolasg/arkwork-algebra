@@ -270,6 +270,9 @@ pub trait AffineCurve:
 
     /// Returns the x and y coordinates of this affine point
     fn xy(&self) -> (Self::BaseField, Self::BaseField);
+    /// Creates the affine point from its x and y coordinates. It is assumed the
+    /// point is not at infinity.
+    fn from_xy(x: Self::BaseField, y: Self::BaseField) -> Self;
 
     /// Returns a fixed generator of unknown exponent.
     #[must_use]

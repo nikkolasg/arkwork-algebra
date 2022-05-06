@@ -199,8 +199,13 @@ impl<P: Parameters> AffineCurve for GroupAffine<P> {
         (self.x, self.y)
     }
 
-    fn from_xy(x: Self::BaseField, y: Self::BaseField) -> Self {
-        GroupAffine::new(x, y, false)
+    fn from_xy(x: Self::BaseField, y: Self::BaseField) -> Result<Self, SerializationError> {
+        let p = GroupAffine::new(x, y, false);
+        if p.is_on_curve() && p.is_in_correct_subgroup_assuming_on_curve() {
+            Ok(p)
+        } else {
+            Err(SerializationError::InvalidData)
+        }
     }
 
     #[inline]

@@ -24,7 +24,7 @@ use ark_ff::{
     fields::{Field, PrimeField, SquareRootField},
     UniformRand,
 };
-use ark_serialize::{CanonicalDeserialize, CanonicalSerialize};
+use ark_serialize::{CanonicalDeserialize, CanonicalSerialize, SerializationError};
 use ark_std::{
     fmt::{Debug, Display},
     hash::Hash,
@@ -271,8 +271,9 @@ pub trait AffineCurve:
     /// Returns the x and y coordinates of this affine point
     fn xy(&self) -> (Self::BaseField, Self::BaseField);
     /// Creates the affine point from its x and y coordinates. It is assumed the
-    /// point is not at infinity.
-    fn from_xy(x: Self::BaseField, y: Self::BaseField) -> Self;
+    /// point is not at infinity. It returns an error if the point is not on
+    /// the curve or the right subgroup.
+    fn from_xy(x: Self::BaseField, y: Self::BaseField) -> Result<Self, SerializationError>;
 
     /// Returns a fixed generator of unknown exponent.
     #[must_use]

@@ -209,6 +209,15 @@ impl<P: SWCurveConfig> AffineRepr for Affine<P> {
         (!self.infinity).then(|| (self.x, self.y))
     }
 
+    fn from_xy(x: Self::BaseField, y: Self::BaseField) -> Result<Self, SerializationError> {
+        let p = Affine::new(x, y);
+        if p.is_on_curve() && p.is_in_correct_subgroup_assuming_on_curve() {
+            Ok(p)
+        } else {
+            Err(SerializationError::InvalidData)
+        }
+    }
+
     #[inline]
     fn generator() -> Self {
         P::GENERATOR

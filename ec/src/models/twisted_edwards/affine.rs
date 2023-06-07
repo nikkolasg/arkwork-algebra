@@ -169,6 +169,15 @@ impl<P: TECurveConfig> AffineRepr for Affine<P> {
     fn xy(&self) -> Option<(Self::BaseField, Self::BaseField)> {
         (!self.is_zero()).then(|| (self.x, self.y))
     }
+    
+    fn from_xy(x: Self::BaseField, y: Self::BaseField) -> Result<Self, SerializationError> {
+        let p = Affine::new(x, y);
+        if p.is_on_curve() && p.is_in_correct_subgroup_assuming_on_curve() {
+            Ok(p)
+        } else {
+            Err(SerializationError::InvalidData)
+        }
+    }
 
     fn generator() -> Self {
         P::GENERATOR
